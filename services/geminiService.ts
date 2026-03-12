@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { VisaRequestParams, VisaInfoResponse, BankAnalysisResult } from "../types";
 
@@ -145,7 +144,7 @@ export const getVisaRequirements = async (params: VisaRequestParams): Promise<Vi
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.0-flash',
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
@@ -180,9 +179,9 @@ export const chatWithGemini = async (message: string, history: { role: string, p
     const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY;
     const ai = new GoogleGenAI({ apiKey });
     
-    // Use gemini-3.1-pro-preview for the chatbot with high thinking level
+    // Use gemini-2.0-flash for the chatbot with high thinking level
     const chat = ai.chats.create({
-      model: "gemini-3.1-pro-preview",
+      model: "gemini-2.0-flash",
       config: {
         systemInstruction: "You are an expert travel and visa assistant. Provide accurate, helpful, and up-to-date information. Use Google Search grounding when needed.",
         thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH },
@@ -207,7 +206,7 @@ export const getFastResponse = async (prompt: string) => {
     const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY;
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: 'gemini-3.1-flash-lite-preview',
+      model: 'gemini-2.0-flash-lite',
       contents: prompt,
     });
     return response.text || "لم يتم العثور على رد.";
@@ -231,7 +230,7 @@ export const analyzeBankStatement = async (file: File): Promise<BankAnalysisResu
     });
 
     const response = await ai.models.generateContent({
-      model: 'gemini-flash-latest',
+      model: 'gemini-2.0-flash',
       contents: [{
         parts: [
           { inlineData: { data: base64Data, mimeType: file.type || 'image/jpeg' } },
